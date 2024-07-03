@@ -4,12 +4,11 @@ import Button from "./Ui/Button";
 import { IProduct } from "./interfaces";
 import { TxtSlicer } from "./utils/functoins";
 interface IProps {
-product :IProduct
-
+  product: IProduct;
 }
 
-const Product: FC<IProps> = ({product}) => {
-  const{title,price,descrition,imageURL,category}=product
+const Product: FC<IProps> = ({ product }) => {
+  const { title, price, descrition, imageURL, category } = product;
   return (
     <div className="max-w-sm md:max-w-lg mx-auto md:mx-0 border rounded-md p-2 flex-col">
       <Image
@@ -18,9 +17,7 @@ const Product: FC<IProps> = ({product}) => {
         className="rounded-md mb-2"
       />
       <h3>{title}</h3>
-      <p>
-        {TxtSlicer(descrition)}
-      </p>
+      <p>{TxtSlicer(descrition)}</p>
       <div className="flex items-center my-4 space-x-1">
         <span className="w-5 h-5 bg-red-600 rounded-full  cursor-pointer" />
         <span className="w-5 h-5 bg-blue-600 rounded-full cursor-pointer" />

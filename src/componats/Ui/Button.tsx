@@ -4,6 +4,7 @@ interface IProps {
   children: ReactNode;
   className?: string;
   width ?:"w-full" | "w-fit";
+  onClick ?: () => void
 }
 
 const Button: FC<IProps> = ({ children,width='w-full',className, ...rest }) => {
