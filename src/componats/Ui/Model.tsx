@@ -1,13 +1,12 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { FC, Fragment, ReactNode,} from "react";
+import { FC, Fragment, ReactNode } from "react";
 interface IProps {
   isOpen: boolean;
   closeModal: () => void;
-  title?: string,
-  children : ReactNode
+  title?: string;
+  children: ReactNode;
 }
-const Modal: FC<IProps> = ({ isOpen, closeModal, title,children}) => {
-
+const Modal: FC<IProps> = ({ isOpen, closeModal, title, children }) => {
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -35,7 +34,7 @@ const Modal: FC<IProps> = ({ isOpen, closeModal, title,children}) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-xl bg-white p-6 text-center align-middle shadow-xl transition-all">
                   {title && (
                     <Dialog.Title
                       as="h3"
@@ -51,9 +50,7 @@ const Modal: FC<IProps> = ({ isOpen, closeModal, title,children}) => {
                     </p>
                   </div>
 
-                  <div className="mt-4">
-                 {children}
-                  </div>
+                  <div className="mt-4">{children}</div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
