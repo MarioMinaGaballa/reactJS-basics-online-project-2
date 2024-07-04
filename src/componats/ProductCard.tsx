@@ -6,7 +6,6 @@ import { TxtSlicer } from "./utils/functoins";
 interface IProps {
   product: IProduct;
 }
-
 const Product: FC<IProps> = ({ product }) => {
   const { title, price, description, imageURL, category } = product;
   return (
@@ -38,5 +37,4 @@ const Product: FC<IProps> = ({ product }) => {
     </div>
   );
 };
-
 export default Product;

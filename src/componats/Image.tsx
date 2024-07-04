@@ -1,18 +1,17 @@
-import { FC } from "react"
+import { FC } from "react";
 
-interface IProps{
-imageURl: string;
-alt:string;
-className :string;
+interface IProps {
+  imageURl: string;
+  alt: string;
+  className: string;
 }
 
-const Image : FC <IProps> = ({imageURl,alt,className}) => {
+const Image: FC<IProps> = ({ imageURl, alt, className }) => {
   return (
     <div>
-  <img src={imageURl} alt={alt} className={className} />
-
+      <img src={imageURl} alt={alt} className={className} />
     </div>
-  )
-}
+  );
+};
 
-export default Image
+export default Image;
