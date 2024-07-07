@@ -5,6 +5,9 @@ import { formInputsList, productList } from "./componats/data";
 import Button from "./componats/Ui/Button";
 import Input from "./componats/Ui/Input";
 import { IProduct } from "./componats/interfaces";
+import { peroductValidation } from "./componats/Validation";
+import Errors from "./componats/Errors";
+
 
 const App = () => {
   // ** STATE
@@ -20,7 +23,11 @@ const App = () => {
     },
   });
   const [isOpen, setIsOpen] = useState(false);
-
+  const [errors,setErrors]=useState(  
+    {title: "",
+    description: "",
+    imageURL: "",
+    price: ""})
 
   // ** Handlers
   function closeModal() {
@@ -35,7 +42,7 @@ const App = () => {
         imageURL: "",
         name: "",
       },
-    })
+    });
   }
 
   function openModal() {
@@ -47,10 +54,26 @@ const App = () => {
       ...product,
       [name]: value,
     });
+    setErrors({...errors,[name]:""})
   }
-  function submitHandler(e:FormEvent<HTMLFormElement>){
+  function submitHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
+    const { description, title, imageURL, price } = product;
+    const errors = peroductValidation({
+       description
+       , title
+       ,imageURL
+        , price 
+      });
+      console.log(errors);
+      const hasErrorMsg=Object.values(errors).some(value => value==="") && Object.values(errors).every(value => value ==="")
+    if(!hasErrorMsg){
+      setErrors(errors)
+      return;
+    }
+    console.log("SEND THIS PRODUCT TO OUR SERVER");
+    
+      
   }
 
   // ** Renders
@@ -74,6 +97,7 @@ const App = () => {
         value={product[input.name]}
         onChange={onChangeHandler}
       />
+    {errors[input.name] && <Errors msg={errors[input.name]}/>}
     </div>
   ));
 
@@ -92,7 +116,6 @@ const App = () => {
       </div>
 
       <Model isOpen={isOpen} closeModal={closeModal} title="ADD A NEW PRODUCT">
-
         <form className="space-y-3" onSubmit={submitHandler}>
           {renderFormInputList}
           <div className="flex items-center space-x-3">
@@ -100,7 +123,6 @@ const App = () => {
             <Button
               className="bg-red-500 hover:bg-red-400"
               onClick={closeModal}
-          
             >
               cancel
             </Button>

@@ -5,6 +5,7 @@ interface IProps {
   className?: string;
   width ?:"w-full" | "w-fit";
   onClick ?: () => void
+  onSubmit? :() => void
 }
 
 const Button: FC<IProps> = ({ children,width='w-full',className, ...rest }) => {
