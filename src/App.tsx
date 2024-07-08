@@ -1,13 +1,13 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import ProductCard from "./componats/ProductCard";
 import Model from "./componats/Ui/Model";
-import { formInputsList, productList } from "./componats/data";
+import { colors, formInputsList, productList } from "./componats/data";
 import Button from "./componats/Ui/Button";
 import Input from "./componats/Ui/Input";
 import { IProduct } from "./componats/interfaces";
 import { peroductValidation } from "./componats/Validation";
 import Errors from "./componats/Errors";
-
+import CircleColor from "./componats/CircleColor";
 
 const App = () => {
   // ** STATE
@@ -23,11 +23,12 @@ const App = () => {
     },
   });
   const [isOpen, setIsOpen] = useState(false);
-  const [errors,setErrors]=useState(  
-    {title: "",
+  const [errors, setErrors] = useState({
+    title: "",
     description: "",
     imageURL: "",
-    price: ""})
+    price: "",
+  });
 
   // ** Handlers
   function closeModal() {
@@ -54,26 +55,26 @@ const App = () => {
       ...product,
       [name]: value,
     });
-    setErrors({...errors,[name]:""})
+    setErrors({ ...errors, [name]: "" });
   }
   function submitHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const { description, title, imageURL, price } = product;
     const errors = peroductValidation({
-       description
-       , title
-       ,imageURL
-        , price 
-      });
-      console.log(errors);
-      const hasErrorMsg=Object.values(errors).some(value => value==="") && Object.values(errors).every(value => value ==="")
-    if(!hasErrorMsg){
-      setErrors(errors)
+      description,
+      title,
+      imageURL,
+      price,
+    });
+    console.log(errors);
+    const hasErrorMsg =
+      Object.values(errors).some((value) => value === "") &&
+      Object.values(errors).every((value) => value === "");
+    if (!hasErrorMsg) {
+      setErrors(errors);
       return;
     }
     console.log("SEND THIS PRODUCT TO OUR SERVER");
-    
-      
   }
 
   // ** Renders
@@ -97,8 +98,11 @@ const App = () => {
         value={product[input.name]}
         onChange={onChangeHandler}
       />
-    {errors[input.name] && <Errors msg={errors[input.name]}/>}
+      {errors[input.name] && <Errors msg={errors[input.name]} />}
     </div>
+  ));
+  const renderProductColors = colors.map((color) => (
+    <CircleColor key={color} color={color} />
   ));
 
   return (
@@ -118,6 +122,9 @@ const App = () => {
       <Model isOpen={isOpen} closeModal={closeModal} title="ADD A NEW PRODUCT">
         <form className="space-y-3" onSubmit={submitHandler}>
           {renderFormInputList}
+          <div className="flex items-center space-x-2">
+            {renderProductColors}
+          </div>
           <div className="flex items-center space-x-3">
             <Button className="bg-blue-500 hover:bg-blue-300">submit</Button>
             <Button

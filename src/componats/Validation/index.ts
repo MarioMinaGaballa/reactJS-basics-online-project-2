@@ -1,8 +1,8 @@
 /*product obj === validtionpbj (title,Descrtion,Image,Price)  */
 /**
- * 
- * @param product 
- * @returns 
+ *
+ * @param product
+ * @returns
  */
 export function peroductValidation(product: {
   title: string;
@@ -30,7 +30,8 @@ export function peroductValidation(product: {
     product.description.length < 10 ||
     product.description.length > 900
   ) {
-    errors.description = "Product description must be between 10 and 900 characters";
+    errors.description =
+      "Product description must be between 10 and 900 characters";
   }
   if (!product.imageURL.trim() || !validUrl) {
     errors.imageURL = "Valid image URL is required";
