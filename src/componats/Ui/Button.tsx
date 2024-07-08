@@ -1,11 +1,10 @@
-import { FC, ReactNode } from "react";
+import { FC, HTMLAttributes, ReactNode } from "react";
 
-interface IProps {
+interface IProps extends HTMLAttributes<HTMLSpanElement> {
   children: ReactNode;
   className?: string;
   width?: "w-full" | "w-fit";
-  onClick?: () => void;
-  onSubmit?: () => void;
+
 }
 
 const Button: FC<IProps> = ({
@@ -16,7 +15,7 @@ const Button: FC<IProps> = ({
 }) => {
   return (
     <button
-      className={`${className} ${width} w-full rounded-lg  p-2 text-white`}
+      className={`${className} ${width} rounded-lg  p-2 text-white cursor-pointer`}
       {...rest}
     >
       {children}

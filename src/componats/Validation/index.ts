@@ -33,7 +33,7 @@ export function peroductValidation(product: {
     errors.description =
       "Product description must be between 10 and 900 characters";
   }
-  if (!product.imageURL.trim() || !validUrl) {
+  if (!product.imageURL.trim() || validUrl) {
     errors.imageURL = "Valid image URL is required";
   }
   if (!product.price.trim() || isNaN(Number(product.price))) {
