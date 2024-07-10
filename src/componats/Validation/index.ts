@@ -9,13 +9,15 @@ export function peroductValidation(product: {
   description: string;
   imageURL: string;
   price: string;
+  colors: string[];
 }) {
   const errors: {
     title: string;
     description: string;
     imageURL: string;
     price: string;
-  } = { title: "", description: "", imageURL: "", price: "" };
+    color: string;
+  } = { title: "", description: "", imageURL: "", price: "",color:"" };
   const validUrl = /^(ftp|http|https):\/\/[^."]+$/.test(product.imageURL);
 
   if (
@@ -38,6 +40,9 @@ export function peroductValidation(product: {
   }
   if (!product.price.trim() || isNaN(Number(product.price))) {
     errors.price = "Valid price is required";
+  }
+  if(JSON.stringify(product.colors)==="[]"){
+    errors.color="Please Choose Colors"
   }
   return errors;
 }

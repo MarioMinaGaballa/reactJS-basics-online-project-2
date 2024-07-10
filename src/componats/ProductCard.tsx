@@ -6,9 +6,18 @@ import { TxtSlicer } from "./utils/functoins";
 import CircleColor from "./CircleColor";
 interface IProps {
   product: IProduct;
+  setProductToEdit :(product :IProduct) =>void
+  openEditModal:()=>void
 }
-const Product: FC<IProps> = ({ product }) => {
+const Product: FC<IProps> = ({ product,setProductToEdit,openEditModal}) => {
   const { title, price, description, imageURL, category,colors } = product;
+
+  // ******************************************* Handlers*******************************************//
+function onEdit(){
+  setProductToEdit(product);
+  openEditModal()
+  
+}
 
   // ******************************************* Renders*******************************************//
   const renderProductColors = colors.map((color) => (
@@ -41,7 +50,7 @@ const Product: FC<IProps> = ({ product }) => {
         />
       </div>
       <div className="flex items-center justify-between space-x-5 my-5">
-        <Button className="bg-blue-500 ">Edit</Button>
+        <Button className="bg-blue-500 " onClick={onEdit}>Edit</Button>
         <Button className="bg-red-500 ">Delete</Button>
       </div>
     </div>
