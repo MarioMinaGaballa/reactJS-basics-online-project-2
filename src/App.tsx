@@ -9,6 +9,7 @@ import { peroductValidation } from "./componats/Validation";
 import Errors from "./componats/Errors";
 import CircleColor from "./componats/CircleColor";
 import { v4 as uuid } from "uuid";
+import SelectMenu from "./componats/Ui/SelectMenu";
 const App = () => {
   const defaultProductObj={
     title: "",
@@ -155,12 +156,15 @@ const App = () => {
       <Model isOpen={isOpen} closeModal={closeModal} title="ADD A NEW PRODUCT">
         <form className="space-y-3" onSubmit={submitHandler}>
           {renderFormInputList}
-
+          <SelectMenu />
+          
           <div className="flex items-center space-x-2 flex-wrap">
             {renderProductColors}
           </div>
 
-          <div className="flex items-center space-x-2 flex-wrap">
+          
+          
+                    <div className="flex items-center space-x-2 flex-wrap">
             {tempColors.map((color) => (
               <span
                 key={color}
@@ -171,7 +175,7 @@ const App = () => {
               </span>
             ))}
           </div>
-
+          
           <div className="flex items-center space-x-3">
             <Button className="bg-blue-500 hover:bg-blue-300">submit</Button>
             <Button
