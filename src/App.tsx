@@ -59,9 +59,6 @@ const App = () => {
   });
   const [tempColors, setTempColors] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
-  console.log(productTodit);
-  
-
   //*******************************************Handlers*******************************************//
   function closeModal() {
     setIsOpen(false);
@@ -96,7 +93,42 @@ const App = () => {
     });
     setErrors({ ...errors, [name]: "" });
   }
+  function onChangeEditHandler(e: ChangeEvent<HTMLInputElement>) {
+    const { value, name } = e.target;
+    setProductToEdit({
+      ...productTodit,
+      [name]: value,
+    });
+    setErrors({ ...errors, [name]: "" });
+  }
   function submitHandler(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const { description, title, imageURL, price } = product;
+    const errors = peroductValidation({
+      description,
+      title,
+      imageURL,
+      price,
+      colors
+    });
+    console.log(errors);
+    const hasErrorMsg =
+      Object.values(errors).some((value) => value === "") &&
+      Object.values(errors).every((value) => value === "");
+    if (!hasErrorMsg) {
+      setErrors(errors);
+      return;
+    }
+      // ************************ ADD DATA ****************************
+    setProducts((prev) => [
+      { ...product, id: uuid(), colors: tempColors,category:selectedCategory},
+      ...prev,
+    ]);
+    setProduct(defaultProductObj);
+    setTempColors([]);
+    closeModal();
+  }
+  function submitEditHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const { description, title, imageURL, price } = product;
     const errors = peroductValidation({
@@ -161,7 +193,7 @@ const App = () => {
       }}
     />
   ));
-
+// **************** Start Of App
   return (
     <main className="container">
       <div className="mt-2 flex justify-center">
@@ -222,20 +254,56 @@ const App = () => {
       </Model>
 {/* ********************* EDIT PRODUCT******** */}
       <Model isOpen={isOpenEdit} closeModal={closeEditModal} title="Edit Product">
-        <form className="space-y-3" onSubmit={submitHandler}>
-          {renderFormInputList}
-          <SelectMenu
+        <form className="space-y-3" onSubmit={submitEditHandler}>
+        <div className="flex flex-col" >
+      <label
+        htmlFor={"title"}
+        className="mb-[2px] text-sm font-medium text-left text-gray-700 "
+      >
+        {/* {input.label} */}
+        Product Title
+      </label>
+
+      <Input
+        type="text"
+        id={"title"}
+        name={"title"}
+        value={productTodit["title"]}
+        onChange={onChangeEditHandler}
+      />
+     <Errors msg={""} />
+    </div>
+        <div className="flex flex-col" >
+      <label
+        htmlFor={"title"}
+        className="mb-[2px] text-sm font-medium text-left text-gray-700 "
+      >
+        {/* {input.label} */}
+        Product Title
+      </label>
+
+      <Input
+        type="text"
+        id={"descrition"}
+        name={"description"}
+        value={productTodit["description"]}
+        onChange={onChangeEditHandler}
+      />
+     <Errors msg={""} />
+    </div>
+          
+          {/* <SelectMenu
             selected={selectedCategory}
             setSelected={setSelectedCategory}
-          />
+          /> */}
 
-          <div className="flex items-center space-x-2 flex-wrap">
+          {/* <div className="flex items-center space-x-2 flex-wrap">
             {renderProductColors}
-          </div>
+          </div> */}
 
 
           {/* color */}
-          <div className="flex items-center space-x-2 flex-wrap">
+          {/* <div className="flex items-center space-x-2 flex-wrap">
             {tempColors.map((color) => (
               <span
                 key={color}
@@ -245,7 +313,7 @@ const App = () => {
                 {color}
               </span>
             ))}
-          </div>
+          </div> */}
 
           <div className="flex items-center space-x-3">
             <Button className="bg-blue-500 hover:bg-blue-300">Edit</Button>
