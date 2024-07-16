@@ -1,13 +1,11 @@
 /**
- * 
- * @param {string} txt - the input text to be sliced
- * @param {number} [m=50] ax - the maximum length before truncation
- * @returns 
+ * Truncates a string to a specified maximum length, adding ellipsis if needed.
+ *
+ * @param {string} text - The input text.
+ * @param {number} [max=40] - The maximum length. Defaults to 40 characters.
+ * @returns {string} - Truncated text with ellipsis if necessary.
  */
-export function TxtSlicer(txt:string,max:number =50){
-  if(txt.length>= max){
-    return `${txt.slice(0,max)} ....`
-  }else{
-    return txt
-  }
-}
+
+export const sliceText = (text: string, max: number = 40) => {
+  return text.length > max ? `${text.slice(0, max)}...` : text;
+};

@@ -1,68 +1,83 @@
-import { FC } from "react";
-import Image from "./Image";
-import Button from "./Ui/Button";
+/* eslint-disable react-refresh/only-export-components */
+import { Dispatch, SetStateAction, memo } from "react";
 import { IProduct } from "./interfaces";
-import { TxtSlicer } from "./utils/functoins";
-import CircleColor from "./CircleColor";
+import Button from "../componats/Ui/Button";
+import { sliceText } from "../componats/utils/functoins";
+import Color from "../componats/Ui/Color";
+
 interface IProps {
   product: IProduct;
-  setProductToEdit :(product :IProduct) =>void
-  openEditModal:()=>void
-  setProductToEditIdx:(value:number)=>void
-  idx:number
-}
-const Product: FC<IProps> = ({ product,setProductToEdit,openEditModal,setProductToEditIdx,idx,}) => {
-  const { title, price, description, imageURL, category,colors } = product;
-
-  // ******************************************* Handlers*******************************************//
-function onEdit(){
-  setProductToEdit(product);
-  openEditModal()
-  setProductToEditIdx(idx)
+  openEditModal: () => void;
+  setCurrEditData: Dispatch<SetStateAction<IProduct>>;
+  setSelectedEditColors: Dispatch<SetStateAction<string[]>>;
+  index: number;
+  setCurrEditDataIdx: Dispatch<SetStateAction<number>>;
+  openDeleteModal: () => void;
 }
 
-  // ******************************************* Renders*******************************************//
-  const renderProductColors = colors.map((color) => (
-    <CircleColor
-      key={color}
-      color={color}
-    />
-  ));
+const ProductCard = ({
+  product,
+  openEditModal,
+  setCurrEditData,
+  setSelectedEditColors,
+  index,
+  setCurrEditDataIdx,
+  openDeleteModal,
+}: IProps) => {
+  const { title, description, imageURL, category, price, colors } = product;
+  const colorData = colors.map((c) => <Color key={c} hex={c} />);
+  const onEdit = () => {
+    openEditModal();
+    setCurrEditData(product);
+    setSelectedEditColors(product.colors);
+    setCurrEditDataIdx(index);
+  };
+
+  const onDelete = () => {
+    console.log(index);
+    openDeleteModal();
+    setCurrEditDataIdx(index);
+  };
+
   return (
-    <div className="max-w-sm md:max-w-lg mx-auto md:mx-0 border rounded-md p-2 flex-col">
-      <Image
-        imageURl={imageURL}
-        alt={product.title}
-        className="rounded-md mb-2"
+    <div className="flex flex-col space-y-3 border rounded-md p-2 max-w-sm mx-auto md:max-w-lg md:mx-0">
+      <img
+        src={imageURL}
+        alt="car"
+        className="mx-auto h-52 w-full object-cover"
       />
-      <h3>{title}</h3>
-      <p>{TxtSlicer(description)}</p>
-  
-    
-      <div className="flex items-center space-x-2 flex-wrap mt-3">
-            {renderProductColors}
-          </div>
-    
-      <div className="flex items-center justify-between ">
-      <p className="text-lg text-indigo-600 font-semibold">
+
+      <p className="mt-3 font-semibold text-lg">{title}</p>
+      <p className="text-sm text-gray-500 break-words">
+        {sliceText(description)}
+      </p>
+
+      <div className="flex space-x-2 mt-3">{colorData}</div>
+
+      <div className="flex justify-between items-center mt-3">
+        <p className="text-lg text-indigo-600 font-semibold">
           ${Number(price).toLocaleString()}
         </p>
-        <div className="flex gap-3">
-      <span className="ml-4 pl-3 mt-3 text-xs font-bold">{category.name}</span>  
-        <Image
-          imageURl={imageURL}
-          alt={category.name}
-          className="w-10 h-10 rounded-full object-bottom"
-            
-        />
+        <div className="flex items-center space-x-2">
+          <span className="text-xs font-semibold">{category.name}</span>
+          <img
+            src={category.imageURL}
+            alt={category.name}
+            className="w-10 h-10 rounded-full object-cover"
+          />
         </div>
-      
       </div>
-      <div className="flex items-center justify-between space-x-5 my-5">
-        <Button className="bg-blue-500 " onClick={onEdit}>Edit</Button>
-        <Button className="bg-red-500 ">Delete</Button>
+
+      <div className="flex text-white space-x-2 mt-3">
+        <Button className=" bg-indigo-600" onClick={() => onEdit()}>
+          EDIT
+        </Button>
+        <Button className="bg-red-600" onClick={() => onDelete()}>
+          DELETE
+        </Button>
       </div>
     </div>
   );
 };
-export default Product;
+
+export default memo(ProductCard);
