@@ -134,8 +134,8 @@ const App = () => {
     }
       // ************************ update DATA ****************************
 const updatedProducts=[...products];
-updatedProducts[productToEditIdx] =productToEdit;
-setProducts(updatedProducts);
+updatedProducts[productToEditIdx] ={...productToEdit,colors:tempColors.concat(productToEdit.colors)};
+     setProducts(updatedProducts);
     setProductToEdit(defaultProductObj);
     setTempColors([]);
     closeEditModal();
@@ -171,6 +171,10 @@ setProducts(updatedProducts);
       color={color}
       onClick={() => {
         if (tempColors.includes(color)) {
+          setTempColors((prev) => prev.filter((item) => item !== color));
+          return;
+        }
+        if (productToEdit.colors.includes(color)) {
           setTempColors((prev) => prev.filter((item) => item !== color));
           return;
         }
@@ -267,19 +271,16 @@ setProducts(updatedProducts);
            {renderProductEditWithErrorMsg("description","product Description","description")}
            {renderProductEditWithErrorMsg("imageURL","product Image URL","imageURL")}
            {renderProductEditWithErrorMsg("price","product Price","price")}
-          {/* <SelectMenu
-            selected={selectedCategory}
-            setSelected={setSelectedCategory}
-          /> */}
+          <SelectMenu
+            selected={productToEdit.category}
+            setSelected={(value)=>setProductToEdit({...productToEdit,category:value})}
+          />
 
-          {/* <div className="flex items-center space-x-2 flex-wrap">
+         <div className="flex items-center space-x-2 flex-wrap">
             {renderProductColors}
-          </div> */}
-
-
-          {/* color */}
-          {/* <div className="flex items-center space-x-2 flex-wrap">
-            {tempColors.map((color) => (
+          </div> 
+           <div className="flex items-center space-x-2 flex-wrap">
+            {tempColors.concat(productToEdit.colors).map((color) => (
               <span
                 key={color}
                 className="p-1 mr-1 mb-1 text-xs rounded-md text-white"
@@ -288,7 +289,7 @@ setProducts(updatedProducts);
                 {color}
               </span>
             ))}
-          </div> */}
+          </div> 
 
           <div className="flex items-center space-x-3">
             <Button className="bg-blue-500 hover:bg-blue-300">Edit</Button>

@@ -43,13 +43,20 @@ function onEdit(){
             {renderProductColors}
           </div>
     
-      <div className="flex items-center justify-between">
-        <span>{price}</span>
+      <div className="flex items-center justify-between ">
+      <p className="text-lg text-indigo-600 font-semibold">
+          ${Number(price).toLocaleString()}
+        </p>
+        <div className="flex gap-3">
+      <span className="ml-4 pl-3 mt-3 text-xs font-bold">{category.name}</span>  
         <Image
           imageURl={imageURL}
           alt={category.name}
           className="w-10 h-10 rounded-full object-bottom"
+            
         />
+        </div>
+      
       </div>
       <div className="flex items-center justify-between space-x-5 my-5">
         <Button className="bg-blue-500 " onClick={onEdit}>Edit</Button>

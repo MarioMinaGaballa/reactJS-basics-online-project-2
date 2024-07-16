@@ -11,7 +11,7 @@ import { categories } from "../data";
 import { ICategory } from "../interfaces";
 
 interface Iprops {
-  selected: ICategory;
+  selected: {name:string , imageURL:string};
   setSelected: (category: ICategory) => void;
 }
 
