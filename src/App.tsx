@@ -15,6 +15,7 @@ import Errors from "./componats/Errors";
 import CircleColor from "./componats/CircleColor";
 import { v4 as uuid } from "uuid";
 import SelectMenu from "./componats/Ui/SelectMenu";
+import { TProductName } from "./componats/types";
 const App = () => {
   const defaultProductObj = {
     title: "",
@@ -29,26 +30,9 @@ const App = () => {
   };
   //*******************************************STATES*******************************************//
   const [products, setProducts] = useState<IProduct[]>(productList);
-  const [product, setProduct] = useState<IProduct>({
-    title: "",
-    description: "",
-    imageURL: "",
-    price: "",
-    colors: [],
-    category: {
-      imageURL: "",
-      name: "",
-    },});
-  const [productTodit,setProductToEdit]=useState<IProduct> ({
-    title: "",
-    description: "",
-    imageURL: "",
-    price: "",
-    colors: [],
-    category: {
-      imageURL: "",
-      name: "",
-    },})
+  const [product, setProduct] = useState<IProduct>(defaultProductObj)
+  const [productToEdit,setProductToEdit]=useState<IProduct>(defaultProductObj)
+  const [productToEditIdx,setProductToEditIdx]=useState<number>(0)
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [errors, setErrors] = useState({
@@ -59,6 +43,8 @@ const App = () => {
   });
   const [tempColors, setTempColors] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+
+  
   //*******************************************Handlers*******************************************//
   function closeModal() {
     setIsOpen(false);
@@ -96,7 +82,7 @@ const App = () => {
   function onChangeEditHandler(e: ChangeEvent<HTMLInputElement>) {
     const { value, name } = e.target;
     setProductToEdit({
-      ...productTodit,
+      ...productToEdit,
       [name]: value,
     });
     setErrors({ ...errors, [name]: "" });
@@ -130,7 +116,7 @@ const App = () => {
   }
   function submitEditHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const { description, title, imageURL, price } = product;
+    const { description, title, imageURL, price } = productToEdit;
     const errors = peroductValidation({
       description,
       title,
@@ -146,19 +132,18 @@ const App = () => {
       setErrors(errors);
       return;
     }
-      // ************************ ADD DATA ****************************
-    setProducts((prev) => [
-      { ...product, id: uuid(), colors: tempColors,category:selectedCategory},
-      ...prev,
-    ]);
-    setProduct(defaultProductObj);
+      // ************************ update DATA ****************************
+const updatedProducts=[...products];
+updatedProducts[productToEditIdx] =productToEdit;
+setProducts(updatedProducts);
+    setProductToEdit(defaultProductObj);
     setTempColors([]);
-    closeModal();
+    closeEditModal();
   }
 
   // ******************************************* Renders*******************************************//
-  const renderProductList = products.map((product) => (
-    <ProductCard key={product.id} product={product} setProductToEdit={setProductToEdit} openEditModal={openEditModal} />
+  const renderProductList = products.map((product,idx) => (
+    <ProductCard key={product.id} product={product} setProductToEdit={setProductToEdit} openEditModal={openEditModal} idx={idx} setProductToEditIdx={setProductToEditIdx} />
   ));
 
   const renderFormInputList = formInputsList.map((input) => (
@@ -193,7 +178,29 @@ const App = () => {
       }}
     />
   ));
-// **************** Start Of App
+  const renderProductEditWithErrorMsg = (id:string,label:string,name:TProductName)=>{
+    return(
+    <div className="flex flex-col" >
+    <label
+      htmlFor={id}
+      className="mb-[2px] text-sm font-medium text-left text-gray-700 "
+    >
+      {/* {input.label} */}
+      {label}
+    </label>
+
+    <Input
+      type="text"
+      id={id}
+      name={name}
+      value={productToEdit[name]}
+      onChange={onChangeEditHandler}
+    />
+   <Errors msg={errors[name]} />
+  </div>
+    )
+  }
+// **************** Start Of App ****************
   return (
     <main className="container">
       <div className="mt-2 flex justify-center">
@@ -255,43 +262,11 @@ const App = () => {
 {/* ********************* EDIT PRODUCT******** */}
       <Model isOpen={isOpenEdit} closeModal={closeEditModal} title="Edit Product">
         <form className="space-y-3" onSubmit={submitEditHandler}>
-        <div className="flex flex-col" >
-      <label
-        htmlFor={"title"}
-        className="mb-[2px] text-sm font-medium text-left text-gray-700 "
-      >
-        {/* {input.label} */}
-        Product Title
-      </label>
-
-      <Input
-        type="text"
-        id={"title"}
-        name={"title"}
-        value={productTodit["title"]}
-        onChange={onChangeEditHandler}
-      />
-     <Errors msg={""} />
-    </div>
-        <div className="flex flex-col" >
-      <label
-        htmlFor={"title"}
-        className="mb-[2px] text-sm font-medium text-left text-gray-700 "
-      >
-        {/* {input.label} */}
-        Product Title
-      </label>
-
-      <Input
-        type="text"
-        id={"descrition"}
-        name={"description"}
-        value={productTodit["description"]}
-        onChange={onChangeEditHandler}
-      />
-     <Errors msg={""} />
-    </div>
-          
+        
+           {renderProductEditWithErrorMsg("title","product Title","title")}
+           {renderProductEditWithErrorMsg("description","product Description","description")}
+           {renderProductEditWithErrorMsg("imageURL","product Image URL","imageURL")}
+           {renderProductEditWithErrorMsg("price","product Price","price")}
           {/* <SelectMenu
             selected={selectedCategory}
             setSelected={setSelectedCategory}

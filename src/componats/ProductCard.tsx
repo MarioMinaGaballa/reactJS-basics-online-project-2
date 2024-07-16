@@ -8,15 +8,17 @@ interface IProps {
   product: IProduct;
   setProductToEdit :(product :IProduct) =>void
   openEditModal:()=>void
+  setProductToEditIdx:(value:number)=>void
+  idx:number
 }
-const Product: FC<IProps> = ({ product,setProductToEdit,openEditModal}) => {
+const Product: FC<IProps> = ({ product,setProductToEdit,openEditModal,setProductToEditIdx,idx,}) => {
   const { title, price, description, imageURL, category,colors } = product;
 
   // ******************************************* Handlers*******************************************//
 function onEdit(){
   setProductToEdit(product);
   openEditModal()
-  
+  setProductToEditIdx(idx)
 }
 
   // ******************************************* Renders*******************************************//
